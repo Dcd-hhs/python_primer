@@ -6,22 +6,45 @@
     
     NOOT:In verband met tekeningen in de toelichting,
     is lezen in fixed width font  aan te raden.
-    
-    In wiskunde zeggen we matrix; in numpy noemen we het array.
-    In wiskunde zeggen we vector; in numpy noemen we het array.1
-    Dus alles is een array...
-    net als in de wiskunde eigenlijk alles ook als matrix gezien kan worden..
-    
-    
-    een array van dimensie 0, ... is wel heel leeg
-    een array van dimensie 1, is een reeks getallen
-    een array van dimensie 2, kan een matrix of een vector zijn
-"""
-
+"""    
+#% Voorwerk
 import numpy as np
 from numpy import sin, cos, linspace, pi
 
-""" Arrays worden opgebouwd in rijen en kolommen.
+
+titel = "Numpy primer" 
+print(80*'*')
+print(10*'*',titel,(80-len(titel)-12)*'*')
+print(80*'*')
+
+def hoofdstuk(tekst):
+    l = len(tekst)
+    print('\n',40*'=#')
+    print('',5*'#=',f'{tekst}',int((80-12)/2-len(tekst)/2)*'#=','\n')
+
+def kopje(tekst):
+    l = len(tekst)
+    print('\n',5*'**',f'{tekst}',int((40-12)/2-len(tekst)/2)*'**','\n')
+
+hoofdstuk('Arrays')
+""" In wiskunde zeggen we matrix; in numpy noemen we het array.
+    In wiskunde zeggen we vector; in numpy noemen we het array.
+    Dus alles is een array...in numpy
+    net als in de wiskunde eigenlijk alles ook als matrix gezien kan worden.
+    Maar toch kunnen we onderscheid maken en dat doen we ook zoveel mogelijk,
+    om de communicatie te bevorderen.
+        
+    een array van dimensie 0, ... is wel heel leeg.
+    een array van dimensie 1, is een reeks getallen
+    een array van dimensie 2, is een vector of een matrix
+                              als een van die 2 dimensies gelijk is aan 1
+                              dan noem je het een vector
+    een array van dimensie 3, of meer, noem je het een multidimensionale matrix
+"""
+reeksgtal = np.array([ 1,2,3,4,54,65 ])
+print(f'{reeksgtal=}\n{reeksgtal.shape=}\n{reeksgtal.ndim=}')
+
+""" Over het Algemeen worden arrays worden opgebouwd in rijen en kolommen.
     Om ze aan te maken gebruik je (b.v.) het standaard "python datatype": list,
     waarbij elke element een rij is die uit een 'list' bestaat.
     mijnarray = np.array(
@@ -31,12 +54,17 @@ from numpy import sin, cos, linspace, pi
      [element,element,element],    < Rij 1
      [element,element,element]     < Rij 2
      ])
-                        .,.,: dat is de 2e kolom
-               .,:,. Dat is de 1e kolom
-         :,.,. Dat is de 0e kolom
+                         ^ dat is de 2e kolom
+                 ^ Dat is de 1e kolom
+         ^ Dat is de 0e kolom
 """
+algemeenarray = np.array(
+     [[ 2, 3, 4],
+      [ 4,54, 2],
+      [12, 5, 1]])
 
 #%% Vectoren
+hoofdstuk ('Vectoren, speciale gevallen van arrays')
 """ Een vector is een speciale vorm van een array.
     Het heeft 2 Dimensies, maar een van de dimensies is maar 1 groot.
     Sommige vectoren staan in een kolom, andere in een rij.
@@ -50,17 +78,12 @@ from numpy import sin, cos, linspace, pi
     bijvoorbeeld in de Fibionacci reeks.
     Dit is anders dan een set, maar de uitleg daarvan voert hier te ver.
 """
-#%%% Vectoren creeeren
-print('\n vectoren creeren:\n')
+rowvector = np.array([[1,2,3,4,54,65]]) #<- let op: één set haakjes meer dan een reeks.
+                                        # een kolom, met één rij met 6 elementen
+colvector = np.array([[1],[2],[3],[4]]) # een kolom, met 4 rijen met elk 1 element
 
-reeksgtal = np.array([ 1,2,3,4,54,65 ])  #<- let op: een set haakjes minder.
-rowvector = np.array([[1,2,3,4,54,65]])
-colvector = np.array([[1],[2],[3],[4]])
-
-
-print(f'{reeksgtal.ndim=}\n{reeksgtal=}')
 print(f'{rowvector.ndim=}\n{rowvector=}')
-print(f'{colvector.ndim=}\n{colvector=}')
+print(f'{colvector.ndim=}\ncolvector=array(\n{colvector})')
 
 enen = np.ones((1,3)) # 1 rij, 3 kolommen
 enen = np.ones((3,1)) # 3 rijen, 1 kolom
@@ -70,73 +93,114 @@ pasopmet = np.empty((3,1))  # empty betekent hier niet leeg, maar onbepaald.
 iets = np.arange(12).reshape(3,4) # 0-11 in een 3rijx4kolommen "matrix"
 
 #%%% vectoren bewerken
-print('\nbewerkingen:\n')
+hoofdstuk('bewerkingen:')
 """ vector bewerkingen:
     Als numpy een 'bewerking' doet, dan retourneert het eigenlijk altijd een copy.
     Het ding dat 'bewerkt' wordt, blijft dus hetzelfde. Als je wat met de uitkomts wilt doen,
-    dan zul je de uitkomst moeten opslaan in een andere variabele
-     (of idd, dezelfde, maar dan is het overschrijven).
+    dan zul je de uitkomst moeten opslaan in een _andere_ variabele
+    (of idd, dezelfde, maar dan heet het _overschrijven_).
 
     a = np.array([[1],[2],[3]])
-    a.T       : Transponeren, van een kolom een vector maken en omgekeerd
+    a.T       : Transponeren, van een kolom een vector maken en omgekeerd,
+                kan ook als np.transpose(a), want het is een functie in de numpy module,
+                maar het is ook toegekend als method aan een array-type, dus a.transpose()
+                Zoals het hier ziet kun je het heel gemakkelijk als _property_ aanroepen.
     a.ndim    : kun je hierboven iets van zien
     a.shape   : vorm in alle dimensies opvragen
     a.size    : aantal elementen opvragen
     help(a)   : hier kun je ook lezen over alle andere nuttige dingen
 """
 
-print(f'{reeksgtal=}\n{reeksgtal.T=}') #weinig verschil.. geen zelfs
-print(f'{rowvector=}\n{rowvector.T=}') #rowvector.T is geen rijvector meer
-print(f'{colvector=}\n{colvector.T=}') #colvector.T is geen kolomvector meer
-
-a = np.array([[1],[2],[3]])
-print(a)
+print(f'{reeksgtal=}\n{reeksgtal.T=}\n') #weinig verschil.. geen zelfs
+print(f'rowvector.T is geen rijvector meer\n',
+      f'{rowvector=}\n rowvector.T=array(\n{rowvector.T})\n') 
+print(f'colvector.T is geen kolomvector meer\n',
+      f'colvector=array(\n{colvector}\n {colvector.T=})')
 
 #%%% rekenen met vectoren
-""" Vector berekeningen
-    a = np.array([[1],[2],[3]])
-    In de wiskunde:
+hoofdstuk(' De (*, @)-operators, en de .dot()-method')
+""" Vector berekeningen in de wiskunde:
         /1\
     a = |2|
         \3/
     a^T = (1,2,4)
-    a*a : kan niet
+    a*a : een 'standaard' product van twee colomvectoren is
+          in de wiskunde(!) niet gedefinieerd
     a.T*a = 1*1+2*2+3*3 = 1+4+9 = 14
-    a*a.T = [[ 1*1, 1*2, 1*3], = [[1,2,3],[2,4,6],[3,6,9]]
-             [ 2*1, 2*2, 2*3],
-             [ 3*1, 3*2, 3*3]]
-    Kan in numpy met:
-    np.dot(a,a) : kan niet, gelukkig... dan lijkt het nog op de bekende wiskunde
-    np.dot(a,a.T) = [[ 1*1, 1*2, 1*3], = [[1,2,3],[2,4,6],[3,6,9]]
-                     [ 2*1, 2*2, 2*3],
-                     [ 3*1, 3*2, 3*3]]
-    np.dot(a.T,a) = [[14]]
+    a*a.T = [[ 1*1, 1*2, 1*3], = [[1,2,3],
+             [ 2*1, 2*2, 2*3],    [2,4,6],
+             [ 3*1, 3*2, 3*3]]    [3,6,9]]
+             
+    Dit gaat in numpy met:
+    a = nd.array([[1],[2],[3]]) #1 kolom, 3 rijen met elk 1 element!
+    a.dot(a) of np.dot(a,a) : kan niet, gelukkig... dan lijkt het nog op de bekende wiskunde
+    a.T.dot(a) of np.dot(a.T,a) = [[14]]
+    a.dot(a.T) of np.dot(a,a.T) = [[ 1*1, 1*2, 1*3], = [[1,2,3],
+                                   [ 2*1, 2*2, 2*3],    [2,4,6],
+                                   [ 3*1, 3*2, 3*3]]    [3,6,9]]
     of met de '@' operator:
+    a.T@a                       = [[14]]
+
     a@a : kan nog altijd niet
     a@a.T -> "matrix"
     a.T@a -> 14 (array van 1x1)
     
     Maar let op! In numpy gaat bewerkingen hoofdzakelijk per element:
-    a*a = [[a[0]*a[0],[a[1]*a[1],[a[2]*a[2]]=[[1],[4],[9]]
-    a*a.T = [[a[0]*a[0],[a[0]*a[1],[a[0]*a[2], =[[1],[2],[3]
-             [a[1]*a[0],[a[1]*a[1],[a[1]*a[2],   [2],[4],[6]
-             [a[2]*a[0],[a[2]*a[1],[a[2]*a[2]]   [3],[6],[9]]
-    a.T*a = [[a[0]*a[0],[a[1]*a[0],[a[2]*a[0], =[[1],[2],[3]
-             [a[0]*a[1],[a[1]*a[1],[a[2]*a[1],   [2],[4],[6]
-             [a[0]*a[2],[a[1]*a[2],[a[2]*a[2]]   [3],[6],[9]]
+    a*a   = [a[0]*a[0],a[1]*a[1],a[2]*a[2]]    = [[1],[4],[9]] #dit is dus ook een colomvector
+    b = a
+    b*a.T = [b[0]*a[0],b[0]*a[1],b[0]*a[2], =[[1],[2],[3]
+             b[1]*a[0],b[1]*a[1],b[1]*a[2],   [2],[4],[6]
+             b[2]*a[0],b[2]*a[1],b[2]*a[2]]   [3],[6],[9]]
+    b.T*a = [b[0]*a[0],b[1]*a[0],b[2]*a[0], =[[1],[2],[3]
+             b[0]*a[1],b[1]*a[1],b[2]*a[1],   [2],[4],[6]
+             b[0]*a[2],b[1]*a[2],b[2]*a[2]]   [3],[6],[9]]
     
     de * operator is dus per element, en +,-,/
     de ** operator ook.
     handig, want 2*a klopt dus b.v. ook nog.
-    of sin(a), de sinus van alle elementen van a.
+    2*a = [2*a[0], 2*a[1], 2*a[2] ] = [[2],[4],[6]] #dit is dus anders dan een python list!
+                                                     dat zou geven: [[1], [2], [3], [1], [2], [3]]
+    of sin(a), de sinus van elk element van a.
+    sin(a) = [ sin(a[0]), sin(a[1]), sin(a[2])] = [[0.84147098],[0.90929743],[0.14112001]]
     
 """
-print('\nberekeningen:\n')
-b = np.array([[2],[3],[4]])
-print(f'{a=}\n{b=}')
-print(f'{a.T*b=}')
-print(f'{a*b.T=}')
-print(f'{np.dot(a,a.T)=}')
+a = np.array([[2],[4],[6]])
+b = np.array([[1],[3],[5]])
+print('a, a.T=')
+print(a, a.T)
+print('b, b.T=')
+print(b, b.T)
+
+
+kopje('De *-operator     is een elementsgewijze vermenigvuldiging, ')
+print('a.T*b =           Je ziet, het is *niet* wat je van een wiskundige vectorvermenigvuldiging verwacht')
+print(f'{a.T*b}        ')
+print('                  Let op! de volgende berekeningen zijn dus elementsgewijs.')
+print('a*b.T')
+print(a*b.T)
+
+kopje('de @-operator     is een matrix-vectorvermenigvuldiging')
+print(f'{a.T@b=}\n\n')
+
+kopje('de .dot()-functie is een matrix-vectorvermenigvuldiging')
+print(f'{a.T.dot(b)=}')
+
+
+print('b*a.T=                # Deze vermenigvuldiging voldoet waarhscijnlijk iets beter aan je verwachting.')
+print(b*a.T)
+print('b@a.T=                # "toevallig" geeft de @ hier hetzelfde resultaat')
+print(b@a.T)
+
+
+print(f'{b.dot(a.T)=}   ')
+print('b.dot(a.T)=')   # Je kan het ook als method aanroepen en als functie 
+print(b.dot(a.T))
+print(f'{np.dot(b.T,a)=}    #aangeroepen als functie')
+print(f'{b.T.dot(a)=}')
+print(f'{a.T.dot(b)=}')
+print(80*'#')
+print('np.dot(a,a.T)=')
+print(np.dot(a,a.T))
 print(f'{a@a.T=}')
 print(f'{a*2=}')
 
@@ -156,7 +220,7 @@ if 0: #als je wel wilt plotten, hier 1 als operand van maken.
     ook voor de vorm van een matrix.
 """
 #%%% Matrices aanmaken
-print('matrix aanmaken')
+hoofdstuk('matrix aanmaken')
 S = np.array([[1,2],[3,4]]) #de array lijkt op de input
 A = np.arange(9).reshape((3,3))+1 #hier wordt de input ge'reshaped' en bij elk element wordt 1 opgeteld.
 print(f'dit is een {A.shape} array, dus {A.shape[0]} rijen en {A.shape[1]} kolommen\nA = \n {A}')
@@ -229,15 +293,17 @@ C = np.arange(9).reshape(3,3)  # een 3x3 array, startend bij 0
 print(f'{C=}')
 print(f'{C.flat[4]=}')  # geef het 4e element, tellend: eerst langs as 1 (de rij),
                         # dan langs as 2 (de kolommen), elke rij afgaand.
-for t in np.nditer(C):  # zo kun je ook alle elementen langs gaan.
-    print(t, end=' ')
+
+for t in np.nditer(C):  # n-dimensionale iteratie
+    print(t, end=' ')   # zo kun je ook alle elementen langs gaan.
     
-print()
-print("'Slicen'")
-""" Laten we met een voorbeeld:
+""" De manier om elementen uit een lijst of tuple te selecteren.
+    Laten we met een voorbeeld:
     we vullen 'selectie' met de list [0,1,2,3,4,5]
-    selectie = list(range(6))
-    
+"""
+print("\n'Slicen'")
+selectie = list(range(6))
+"""
     Door een gepaste 'slice' toe te passen. [{start}:{stop}:{stap}]
     Deze geef je aan met een start, stop en stapwaarde.
     Deze krijgen standaard waarden: [0:len(selectie):1]
